@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Local dev database (PGlite)
+data/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output (none currently, kept for future)
+dist/
+build/

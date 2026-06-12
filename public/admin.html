@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fun Football — Admin</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>⚙️</text></svg>" />
+  <script>(function(){try{var t=localStorage.getItem('ff_theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">
+        <span class="logo">⚙️</span>
+        <div>
+          <h1>Fun Football — Admin</h1>
+          <p class="tagline">Teams · Players · Matches · Lock control · Results · Promo</p>
+        </div>
+      </div>
+      <div class="header-user">
+        <button id="themeToggle" class="btn btn-ghost btn-sm" title="Toggle light/dark">🌙</button>
+        <a href="/" class="btn btn-ghost btn-sm">View site ↗</a>
+        <button id="logoutBtn" class="btn btn-sm hidden">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Login -->
+    <section id="loginView" class="card modal" style="margin: 40px auto;">
+      <h2 style="margin-top:0;">🔒 Admin login</h2>
+      <p class="muted">Enter the admin password (set via the <code>ADMIN_PASSWORD</code> environment variable). Repeated wrong attempts are temporarily blocked.</p>
+      <label for="adminPassword">Password</label>
+      <input id="adminPassword" type="password" placeholder="••••••••" autocomplete="current-password" />
+      <div style="margin-top:16px;"><button class="btn btn-primary" id="loginBtn">Log in</button></div>
+      <p style="color:var(--danger);min-height:18px;" id="loginError"></p>
+    </section>
+
+    <!-- Admin app -->
+    <section id="adminView" class="hidden">
+      <div class="admin-nav" id="adminNav">
+        <span class="tab active" data-view="dashboard">Dashboard</span>
+        <span class="tab" data-view="matches">Matches</span>
+        <span class="tab" data-view="results">Results &amp; Lock</span>
+        <span class="tab" data-view="teams">Teams</span>
+        <span class="tab" data-view="players">Players</span>
+        <span class="tab" data-view="users">Users</span>
+        <span class="tab" data-view="promo">Promo &amp; Settings</span>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="view" id="view-dashboard">
+        <div class="card">
+          <h3 style="margin-top:0;">📊 Overview</h3>
+          <div class="mystats" id="statCards" style="margin:0;"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0;">⏱️ Next matches &amp; lock status</h3>
+          <div id="upcomingList"></div>
+        </div>
+      </div>
+
+      <!-- Matches -->
+      <div class="view hidden" id="view-matches">
+        <div class="card">
+          <h3 style="margin-top:0;">Add / edit match</h3>
+          <input type="hidden" id="matchId" />
+          <div class="row">
+            <div><label>Team A (home)</label><select id="matchHome"></select></div>
+            <div><label>Team B (away)</label><select id="matchAway"></select></div>
+          </div>
+          <div class="row">
+            <div><label>Kickoff (your local time)</label><input type="datetime-local" id="matchKickoff" /></div>
+            <div><label>Stage / group (optional)</label><input id="matchStage" placeholder="e.g. Group A, Round of 16" /></div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Prediction lock time (optional — defaults to a few min before kickoff)</label>
+              <input type="datetime-local" id="matchLockAt" />
+            </div>
+            <div>
+              <label>Manual lock override</label>
+              <select id="matchManualLock">
+                <option value="auto">Auto (use lock time)</option>
+                <option value="open">Force OPEN (ignore time)</option>
+                <option value="locked">Force LOCKED (ignore time)</option>
+              </select>
+            </div>
+          </div>
+          <p class="muted" style="font-size:12px;">MVP options on the public site are automatically all players of Team A + Team B.</p>
+          <div style="margin-top:14px;">
+            <button class="btn btn-primary" id="saveMatchBtn">Save match</button>
+            <button class="btn btn-ghost hidden" id="cancelMatchEdit">Cancel edit</button>
+          </div>
+        </div>
+        <div class="card"><h3 style="margin-top:0;">All matches</h3><div id="matchList"></div></div>
+      </div>
+
+      <!-- Results & Lock -->
+      <div class="view hidden" id="view-results">
+        <div class="card">
+          <h3 style="margin-top:0;">Results, MVP &amp; manual lock</h3>
+          <p class="muted">Set the <strong>winner</strong> and <strong>MVP</strong> then "Save result &amp; finish" — leaderboards update instantly. Use the lock buttons to force a match open/locked regardless of time (overrides the lock time).</p>
+          <div id="resultList"></div>
+        </div>
+      </div>
+
+      <!-- Teams -->
+      <div class="view hidden" id="view-teams">
+        <div class="card">
+          <h3 style="margin-top:0;">Add / edit team</h3>
+          <input type="hidden" id="teamId" />
+          <div class="row">
+            <div><label>Team name</label><input id="teamName" placeholder="e.g. Argentina" /></div>
+            <div><label>Flag / code (optional)</label><input id="teamCode" placeholder="🇦🇷" /></div>
+            <div><label>Confederation (optional)</label><input id="teamConf" placeholder="UEFA, CONMEBOL…" /></div>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-primary" id="saveTeamBtn">Save team</button>
+            <button class="btn btn-ghost hidden" id="cancelTeamEdit">Cancel edit</button>
+          </div>
+        </div>
+        <div class="card"><h3 style="margin-top:0;">Teams</h3><div id="teamList"></div></div>
+      </div>
+
+      <!-- Players -->
+      <div class="view hidden" id="view-players">
+        <div class="card">
+          <h3 style="margin-top:0;">Add / edit player</h3>
+          <input type="hidden" id="playerId" />
+          <div class="row">
+            <div><label>Player name</label><input id="playerName" placeholder="e.g. Lionel Messi" /></div>
+            <div><label>Team</label><select id="playerTeam"></select></div>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-primary" id="savePlayerBtn">Save player</button>
+            <button class="btn btn-ghost hidden" id="cancelPlayerEdit">Cancel edit</button>
+          </div>
+        </div>
+        <div class="card"><h3 style="margin-top:0;">Players</h3><div id="playerList"></div></div>
+      </div>
+
+      <!-- Users (with PRIVATE Instagram, admin-only) -->
+      <div class="view hidden" id="view-users">
+        <div class="card">
+          <h3 style="margin-top:0;">Registered users</h3>
+          <p class="muted">Instagram handles below are <strong>private</strong> — visible only here, for reaching out about goodies. Not shown to other users.</p>
+          <div id="userList"></div>
+        </div>
+      </div>
+
+      <!-- Promo & Settings -->
+      <div class="view hidden" id="view-promo">
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="margin-top:0;">Homepage promo / ad box</h3>
+            <p class="muted">Show a poster, text, your friend's Instagram, or an advertisement.</p>
+            <label><input type="checkbox" id="promoEnabled" style="width:auto;display:inline-block;margin-right:8px;" />Show promo box</label>
+            <label>Type</label>
+            <select id="promoType">
+              <option value="text">Text</option>
+              <option value="image">Image / poster</option>
+              <option value="insta">Instagram</option>
+              <option value="ad">Advertisement (image + link)</option>
+            </select>
+            <label>Title</label><input id="promoTitle" placeholder="Featured" />
+            <label>Text</label><textarea id="promoText" rows="3" placeholder="Message / caption"></textarea>
+            <label>Image URL (image / ad)</label><input id="promoImageUrl" placeholder="https://..." />
+            <label>Instagram handle (insta)</label><input id="promoInsta" placeholder="@creator" />
+            <label>Link (ad / learn more)</label><input id="promoLink" placeholder="https://..." />
+            <div style="margin-top:14px;"><button class="btn btn-primary" id="savePromoBtn">Save promo</button></div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0;">Scoring, rules &amp; disclaimer</h3>
+            <label>Site title</label><input id="setSiteTitle" />
+            <label>Site tagline</label><input id="setSiteTagline" />
+            <div class="row">
+              <div><label>🗡️ Giant Slayer max points (odds scale)</label><input type="number" id="setOddsScale" min="1" /></div>
+              <div><label>Points: MVP</label><input type="number" id="setPointsMvp" min="0" /></div>
+            </div>
+            <div class="row">
+              <div><label>Default lock window (min before kickoff)</label><input type="number" id="setLockMinutes" min="0" /></div>
+              <div><label>Min predictions for Average board</label><input type="number" id="setMinPredictions" min="1" /></div>
+            </div>
+            <div class="row">
+              <div><label>Leaderboard size (show top N)</label><input type="number" id="setLeaderboardSize" min="1" /></div>
+            </div>
+            <label>Disclaimer (no-gambling note shown on site)</label>
+            <textarea id="setDisclaimer" rows="4"></textarea>
+            <label>Titles (advanced — JSON array of {min, name, emoji})</label>
+            <textarea id="setTitles" rows="4" placeholder='[{"min":0,"name":"Debutant","emoji":"🆕"}]'></textarea>
+            <div style="margin-top:14px;"><button class="btn btn-primary" id="saveRulesBtn">Save settings</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

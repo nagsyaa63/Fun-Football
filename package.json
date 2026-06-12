@@ -1,0 +1,25 @@
+{
+  "name": "fun-football-predictions",
+  "version": "2.0.0",
+  "description": "Fun Football - a simple World Cup match prediction website with leaderboards and an admin panel (Postgres / Supabase).",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node seed.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17"
+  },
+  "license": "MIT"
+}

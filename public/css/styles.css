@@ -343,3 +343,110 @@ html[data-theme="light"] .title-pill { color: #8a6d08; }
 .league-row code { background: var(--card-2); padding: 1px 6px; border-radius: 6px; }
 
 @media (max-width: 760px) { .tab { min-height: 44px; } }
+
+/* ===========================================================================
+   MOBILE RESPONSIVE FIXES
+   =========================================================================== */
+
+/* --- Header: wrap onto two lines on small screens --- */
+@media (max-width: 600px) {
+  .site-header .container {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .brand h1 { font-size: 17px; }
+  .brand .tagline { display: none; }          /* hide tagline to save space */
+  .header-user {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .header-user .btn { font-size: 12px; padding: 6px 10px; }
+  .header-user .badge { font-size: 11px; }
+}
+
+/* --- Match cards: stack team names vertically on tiny screens --- */
+@media (max-width: 480px) {
+  .match-head { flex-direction: column; align-items: flex-start; }
+  .match-teams { font-size: 15px; flex-wrap: wrap; }
+  .match-meta { text-align: left; }
+}
+
+/* --- Prediction row inside a match card: stack select + button --- */
+@media (max-width: 540px) {
+  .match-body .row { flex-direction: column; gap: 8px; }
+  .match-body .row > * { min-width: 0; width: 100%; }
+  .match-body .inline-form { flex-direction: column; gap: 8px; }
+  .match-body .inline-form > * { width: 100%; }
+  .match-body .btn { width: 100%; }
+}
+
+/* --- Leaderboard table: horizontal scroll so columns never overflow --- */
+#leaderboard { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#leaderboard table { min-width: 400px; }
+
+/* --- Admin nav tabs: scroll horizontally instead of wrapping messily --- */
+@media (max-width: 600px) {
+  .admin-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding-bottom: 4px;
+  }
+  .admin-nav .tab { white-space: nowrap; flex-shrink: 0; }
+}
+
+/* --- Admin form rows: always single column on mobile --- */
+@media (max-width: 540px) {
+  .row { flex-direction: column; }
+  .row > * { min-width: 0; width: 100%; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* --- Modals: full-width on small screens, better padding --- */
+@media (max-width: 500px) {
+  .modal { max-width: 100%; margin: 0; border-radius: 16px 16px 0 0; }
+  .modal-backdrop { align-items: flex-end; padding: 0; }
+  .modal .row { flex-direction: column; }
+  .modal .row .btn { width: 100%; }
+}
+
+/* --- My stats bar: tighten on mobile --- */
+@media (max-width: 480px) {
+  .mystats { gap: 10px; padding: 10px 12px; }
+  .mystats .stat b { font-size: 16px; }
+  .progress { min-width: 100px; }
+}
+
+/* --- Promo box: stack image + text vertically --- */
+@media (max-width: 540px) {
+  .promo { flex-direction: column; }
+  .promo img { max-width: 100%; }
+}
+
+/* --- Vote bar labels: hide percentage text in tiny bars --- */
+@media (max-width: 360px) {
+  .votebar > span { font-size: 0; }   /* hide % labels but keep the bar colours */
+}
+
+/* --- Result list in admin: buttons wrap neatly --- */
+@media (max-width: 600px) {
+  .list-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .list-item .meta { width: 100%; }
+}
+
+/* --- General: prevent anything from causing horizontal page overflow --- */
+body { overflow-x: hidden; }
+.container { overflow-x: hidden; }
+
+/* --- Icon+text buttons: hide text label on very small screens --- */
+.btn-icon-label { display: inline-flex; align-items: center; gap: 4px; }
+@media (max-width: 480px) {
+  .btn-icon-label .btn-text { display: none; }
+  /* Make auth button shorter too */
+  #authBtn { padding: 6px 10px; font-size: 12px; }
+}

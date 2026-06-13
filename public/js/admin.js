@@ -42,12 +42,12 @@
 
   /* ----------------------------- Theme ----------------------------- */
   function applyThemeIcon() {
-    const t = document.documentElement.getAttribute('data-theme') || 'dark';
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
     const btn = $('#themeToggle');
-    if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+    if (btn) btn.textContent = t === 'dark' ? '🌙' : '☀️';
   }
   function toggleTheme() {
-    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    const cur = document.documentElement.getAttribute('data-theme') || 'light';
     const next = cur === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('ff_theme', next); } catch { /* ignore */ }

@@ -62,11 +62,11 @@
 
   /* ----------------------------- Theme ----------------------------- */
   function applyThemeIcon() {
-    const t = document.documentElement.getAttribute('data-theme') || 'dark';
-    const btn = $('#themeToggle'); if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
+    const btn = $('#themeToggle'); if (btn) btn.textContent = t === 'dark' ? '🌙' : '☀️';
   }
   function toggleTheme() {
-    const next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'light' ? 'dark' : 'light';
+    const next = (document.documentElement.getAttribute('data-theme') || 'light') === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('ff_theme', next); } catch {}
     applyThemeIcon();

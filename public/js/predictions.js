@@ -160,8 +160,61 @@
   }
 
   function votesHtml(m) {
-    if (!m.votes || !m.votes.total) return `<div class="votes"><div class="vlabel">No predictions were made.</div></div>`;
+    const isFinished = m.status === 'finished';
+    
+    if (!m.votes || !m.votes.total) {
+      return `<div class="votes"><div class="vlabel">No predictions were made.</div></div>`;
+    }
+    
     const p = m.votes.pct;
+    
+    // For finished matches, show accuracy chart (correct vs incorrect)
+    if (isFinished && m.result) {
+      // Calculate correct vs incorrect predictions
+      const correctOutcome = m.result.outcome; // 'home', 'draw', or 'away'
+      let correctCount = 0;
+      
+      if (correctOutcome === 'home') correctCount = Math.round(m.votes.total * p.home / 100);
+      else if (correctOutcome === 'draw') correctCount = Math.round(m.votes.total * p.draw / 100);
+      else if (correctOutcome === 'away') correctCount = Math.round(m.votes.total * p.away / 100);
+      
+      const incorrectCount = m.votes.total - correctCount;
+      const correctPct = Math.round((correctCount / m.votes.total) * 100);
+      const incorrectPct = 100 - correctPct;
+      
+      return `<div class="prediction-chart">
+        <div class="vlabel">${m.votes.total} total predictions — accuracy breakdown:</div>
+        
+        <!-- Accuracy Chart -->
+        <div class="chart-container">
+          <div class="pie-chart">
+            ${generateAccuracyChart(correctPct, incorrectPct)}
+            <div class="pie-center">
+              <div class="pie-center-value">${correctPct}%</div>
+              <div class="pie-center-label">Correct</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-color correct"></div>
+              <div class="legend-text">
+                <span class="legend-label">✓ Correct</span>
+                <span class="legend-value">${correctCount} (${correctPct}%)</span>
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color incorrect"></div>
+              <div class="legend-text">
+                <span class="legend-label">✗ Incorrect</span>
+                <span class="legend-value">${incorrectCount} (${incorrectPct}%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+    
+    // For locked (not finished) matches, show horizontal bar
     const seg = (cls, pctv) => (pctv > 0 ? `<span class="${cls}" style="width:0" data-w="${pctv}">${pctv}%</span>` : '');
     return `<div class="votes">
       <div class="vlabel">What ${m.votes.total} predictor(s) picked:</div>
@@ -172,6 +225,43 @@
         <span><i style="background:var(--accent-2)"></i>${esc(m.awayTeam.name)} ${p.away}%</span>
       </div>
     </div>`;
+  }
+
+  function generateAccuracyChart(correct, incorrect) {
+    const circumference = 377;
+    const radius = 60;
+    
+    const correctSegment = (correct / 100) * circumference;
+    const incorrectSegment = (incorrect / 100) * circumference;
+    
+    const colorCorrect = '#2ecc71'; // Bright green for correct
+    const colorIncorrect = '#e74c3c'; // Red for incorrect
+    
+    return `
+      <svg viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="${radius}" stroke="var(--border)" stroke-width="32" fill="none" opacity="0.2"/>
+        ${correct > 0 ? `
+        <circle 
+          cx="80" 
+          cy="80" 
+          r="${radius}"
+          stroke="${colorCorrect}"
+          stroke-dasharray="${correctSegment} ${circumference}"
+          stroke-dashoffset="0"
+          data-segment="correct"
+        />` : ''}
+        ${incorrect > 0 ? `
+        <circle 
+          cx="80" 
+          cy="80" 
+          r="${radius}"
+          stroke="${colorIncorrect}"
+          stroke-dasharray="${incorrectSegment} ${circumference}"
+          stroke-dashoffset="${-correctSegment}"
+          data-segment="incorrect"
+        />` : ''}
+      </svg>
+    `;
   }
 
   function matchGroup(m) { return m.status === 'finished' ? 2 : (m.locked ? 1 : 0); }
@@ -190,7 +280,7 @@
       return kb - ka;
     });
     
-    const meta = { 0: '🔴 Live — predict now', 1: '🔒 Locked — awaiting result', 2: '✅ Finished — results in' };
+    const meta = { 0: '🟢 Open — predict now', 1: '🔒 Locked — awaiting result', 2: '✅ Finished — results in' };
     const counts = { 0: 0, 1: 0, 2: 0 };
     sorted.forEach((m) => (counts[matchGroup(m)] += 1));
     
@@ -212,7 +302,7 @@
     const mp = m.myPrediction || {};
     const isFinished = m.status === 'finished';
     const locked = m.locked || isFinished;
-    let statusTag = `<span class="status-tag status-open">Live</span>`;
+    let statusTag = `<span class="status-tag status-open">Open</span>`;
     if (isFinished) statusTag = `<span class="status-tag status-finished">Finished</span>`;
     else if (locked) statusTag = `<span class="status-tag status-locked">Locked</span>`;
 

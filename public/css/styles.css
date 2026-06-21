@@ -862,6 +862,116 @@ select {
   vertical-align: middle;
 }
 
+/* ── Circular Chart (Pie Chart) ───────────────────────────────────────────── */
+.prediction-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.chart-container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pie-chart {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pie-chart svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.pie-chart circle {
+  fill: none;
+  stroke-width: 32;
+  transition: stroke-dashoffset 0.6s cubic-bezier(.22,1,.36,1);
+}
+
+.pie-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.pie-center-value {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.pie-center-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.legend-color.home { background: var(--primary); }
+.legend-color.draw { background: var(--accent); }
+.legend-color.away { background: var(--accent-2); }
+.legend-color.correct { background: #2ecc71; }
+.legend-color.incorrect { background: #e74c3c; }
+
+.legend-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.legend-label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.legend-value {
+  color: var(--muted);
+  margin-left: auto;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Result / earned ──────────────────────────────────────────────────────── */
 .result-line {
   font-size: 13px;

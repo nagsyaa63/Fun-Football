@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fun Football — 2026 World Cup Predictions</title>
-  <meta name="description" content="Predict the winner and the MVP for every 2026 World Cup match. Free, fun, no gambling — just bragging rights and leaderboards!" />
+  <title>Predictions — Fun Football</title>
+  <meta name="description" content="Make your predictions for the 2026 World Cup matches" />
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,8 +45,8 @@
         <button id="sidenavClose" class="btn btn-ghost btn-sm" aria-label="Close menu">✕</button>
       </div>
       <div class="sidenav-body">
-        <a href="/" class="sidenav-item active">🏠 Home</a>
-        <a href="/predictions.html" class="sidenav-item">⚽ Predictions</a>
+        <a href="/" class="sidenav-item">🏠 Home</a>
+        <a href="/predictions.html" class="sidenav-item active">⚽ Predictions</a>
         <a href="/leaderboard.html" class="sidenav-item">🏆 Leaderboard</a>
         <button id="sidenavProfile" class="sidenav-item hidden">👤 Profile</button>
         <button id="sidenavAuth" class="sidenav-item">🔑 Log in / Sign up</button>
@@ -59,42 +59,16 @@
   </div>
 
   <main class="container">
-    <h2 class="page-title">Welcome to Fun Football</h2>
+    <a href="/" class="back-to-home">Back to Home</a>
     
-    <!-- Logged-in user's stats + title progress -->
-    <section id="myStats" class="mystats hidden">
-      <div class="stats-actions">
-        <a href="/predictions.html" class="btn btn-primary">⚽ View Predictions</a>
-        <a href="/leaderboard.html" class="btn btn-primary">🏆 View Leaderboard</a>
-      </div>
-    </section>
+    <h2 class="page-title">⚽ Match Predictions</h2>
+    <p class="page-subtitle" id="lockNote"></p>
 
-    <!-- Editable promo / ad box (managed from the admin panel) -->
-    <section id="promoBox" class="card promo hidden"></section>
+    <!-- Locking-soon nudge -->
+    <section id="lockBanner" class="lock-banner hidden"></section>
 
-    <!-- Feature Cards -->
-    <div class="feature-grid">
-      <div class="card feature-card">
-        <div class="feature-icon">⚽</div>
-        <h3>Make Predictions</h3>
-        <p>Predict match results and MVPs for every 2026 World Cup game. Free, fun, and no gambling.</p>
-        <a href="/predictions.html" class="btn btn-primary">Start Predicting</a>
-      </div>
-
-      <div class="card feature-card">
-        <div class="feature-icon">🏆</div>
-        <h3>Compete on Leaderboards</h3>
-        <p>Climb the rankings with bold predictions. The fewer people who back a result, the more points you earn.</p>
-        <a href="/leaderboard.html" class="btn btn-primary">View Leaderboard</a>
-      </div>
-
-      <div class="card feature-card">
-        <div class="feature-icon">🗡️</div>
-        <h3>Giant Slayer Points</h3>
-        <p>Back underdogs and earn massive points. Correct bold calls reward you more than obvious picks.</p>
-        <button class="btn btn-primary" id="howBtn">Learn How</button>
-      </div>
-    </div>
+    <!-- Matches -->
+    <div id="matches"></div>
   </main>
 
   <footer class="site-footer">
@@ -114,7 +88,7 @@
     </div>
   </footer>
 
-  <!-- Auth modal (username + password) -->
+  <!-- Auth modal -->
   <div class="modal-backdrop" id="authModal">
     <div class="card modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <h2 id="authTitle" style="margin-top:0;">Log in / Sign up</h2>
@@ -131,7 +105,7 @@
     </div>
   </div>
 
-  <!-- Profile modal (username + fan team + private Instagram) -->
+  <!-- Profile modal -->
   <div class="modal-backdrop" id="profileModal">
     <div class="card modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
       <h2 id="profileTitle" style="margin-top:0;">Your profile</h2>
@@ -189,6 +163,6 @@
 
   <div class="toast" id="toast"></div>
   <script src="/js/shared.js"></script>
-  <script src="/js/home.js"></script>
+  <script src="/js/predictions.js"></script>
 </body>
 </html>

@@ -78,18 +78,42 @@ html[data-theme="dark"] body {
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
 .container {
-  max-width: 1040px;
-  margin: 0 auto;
+  /* max-width: 1040px; */
+  /* margin: 0 auto; */
   padding: 0 16px;
   overflow-x: hidden;
 }
 
+main.container {
+  margin-top: 80px;
+  margin-bottom: 40px;
+  min-height: calc(100vh - 240px);
+}
+
+/* ── Page Titles ──────────────────────────────────────────────────────────── */
+.page-title {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.page-subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
 /* ── Header ───────────────────────────────────────────────────────────────── */
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 20;
-  background: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -97,7 +121,7 @@ html[data-theme="dark"] body {
 }
 
 html[data-theme="dark"] .site-header {
-  background: rgba(14,21,18,0.88);
+  background: rgba(14,21,18,0.95);
 }
 
 .site-header .container {
@@ -105,22 +129,47 @@ html[data-theme="dark"] .site-header {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hamburger {
+  font-size: 20px;
+  padding: 8px 12px;
 }
 
 .brand {
   display: flex;
   gap: 12px;
   align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover {
+  opacity: 0.8;
+  text-decoration: none;
 }
 
 .brand .logo {
-  font-size: 28px;
-  width: 44px;
-  height: 44px;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
   background: var(--grad-hero);
-  border-radius: 12px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -129,7 +178,7 @@ html[data-theme="dark"] .site-header {
 
 .brand h1 {
   font-family: "Bricolage Grotesque", system-ui, sans-serif;
-  font-size: clamp(18px, 2.4vw, 24px);
+  font-size: clamp(16px, 2.4vw, 20px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -137,15 +186,123 @@ html[data-theme="dark"] .site-header {
 }
 
 .brand .tagline {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
   margin: 0;
 }
 
-.header-user {
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-name {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.brand-title {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: clamp(16px, 2.4vw, 20px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ── Side Navigation ──────────────────────────────────────────────────────── */
+.sidenav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,24,31,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidenav-backdrop.show {
+  display: block;
+  opacity: 1;
+}
+
+.sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  z-index: 101;
+}
+
+.sidenav-backdrop.show .sidenav {
+  transform: translateX(0);
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card-2);
+}
+
+.sidenav-header h2 {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.sidenav-body {
+  padding: 12px;
+}
+
+.sidenav-item {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+.sidenav-item:hover {
+  background: var(--card-2);
+  border-color: var(--border);
+}
+
+.sidenav-item.active {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-weight: 700;
+}
+
+.sidenav-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────────── */
@@ -345,9 +502,10 @@ select {
   align-items: center;
   background: var(--grad-hero);
   border-radius: var(--radius);
-  padding: 20px 24px;
+  padding: 24px;
   margin-bottom: 20px;
   color: white;
+  position: relative;
 }
 
 .mystats .stat { text-align: center; }
@@ -365,6 +523,29 @@ select {
   color: rgba(255,255,255,0.75);
   text-transform: uppercase;
   letter-spacing: 0.7px;
+}
+
+.stats-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.stats-actions .btn {
+  flex: 1;
+  min-width: 180px;
+  justify-content: center;
+  background: white;
+  color: var(--primary);
+  border: none;
+  font-weight: 700;
+}
+
+.stats-actions .btn:hover {
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
 }
 
 .progress {
@@ -496,6 +677,19 @@ select {
   padding: 0;
   overflow: hidden;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 3px solid grey;
+}
+
+.match-card[data-status="open"] {
+  border-left-color: var(--primary);
+}
+
+.match-card[data-status="locked"] {
+  border-left-color: var(--warn);
+}
+
+.match-card[data-status="finished"] {
+  border-left-color: var(--accent);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -509,11 +703,11 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--card-2);
+  padding: 18px 20px;
   border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
   gap: 8px;
+  background-color: ghostwhite;
 }
 
 .match-teams {
@@ -521,7 +715,7 @@ select {
   align-items: center;
   gap: 10px;
   font-family: "Bricolage Grotesque", system-ui, sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   flex-wrap: wrap;
 }
@@ -540,7 +734,7 @@ select {
   flex-shrink: 0;
 }
 
-.match-body { padding: 18px 20px; }
+.match-body { padding: 20px; }
 
 /* ── Status tags ──────────────────────────────────────────────────────────── */
 .status-tag {
@@ -556,8 +750,8 @@ select {
 }
 
 .status-open {
-  background: rgba(27,107,58,0.1);
-  color: var(--primary);
+  background: red;
+  color: white;
   border: 1.5px solid rgba(27,107,58,0.3);
 }
 
@@ -942,6 +1136,145 @@ footer {
   margin-top: 16px;
 }
 
+/* ── Footer (New Enhanced Footer) ─────────────────────────────────────────── */
+.site-footer {
+  background: var(--card-2);
+  border-top: 1px solid var(--border);
+  padding: 32px 0 20px;
+  margin-top: 60px;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.footer-brand .logo-small {
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  background: var(--grad-hero);
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.footer-brand p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-links-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* Back to Home Button */
+.back-to-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px 16px;
+  background: black;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  margin-top: 15px;
+}
+
+.back-to-home:hover {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-color: var(--primary);
+  transform: translateX(-2px);
+  text-decoration: none;
+}
+
+/* ── Feature Cards ────────────────────────────────────────────────────────── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 32px 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.feature-card h3 {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.feature-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.feature-card .btn {
+  width: 100%;
+  justify-content: center;
+}
+
 /* ── Admin ────────────────────────────────────────────────────────────────── */
 .admin-nav {
   display: flex;
@@ -1050,14 +1383,17 @@ footer {
   .admin-nav { flex-wrap: nowrap; padding-bottom: 4px; }
   .admin-nav .tab { white-space: nowrap; }
   .list-item { flex-direction: column; align-items: flex-start; }
+  .feature-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
-  .site-header .container { flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
-  .brand h1 { font-size: 17px; }
+  .site-header .container { gap: 8px; }
+  .brand h1 { font-size: 15px; }
   .brand .tagline { display: none; }
-  .header-user { width: 100%; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
-  .header-user .btn { font-size: 12px; padding: 6px 10px; }
+  .header-right { gap: 6px; }
+  .header-right .btn { font-size: 12px; padding: 6px 10px; }
+  .header-right a span { display: none; }
+  main.container { margin-top: 70px; }
 }
 
 @media (max-width: 540px) {
@@ -1066,6 +1402,8 @@ footer {
   .match-body .btn { width: 100%; }
   .promo { flex-direction: column; }
   .promo img { max-width: 100%; }
+  .stats-actions { flex-direction: column; }
+  .stats-actions .btn { width: 100%; min-width: 0; }
 }
 
 @media (max-width: 500px) {
@@ -1077,14 +1415,16 @@ footer {
 
 @media (max-width: 480px) {
   .match-head { flex-direction: column; align-items: flex-start; }
-  .match-teams { font-size: 15px; }
+  .match-teams { font-size: 16px; }
   .match-meta { text-align: left; }
   .mystats .stat b { font-size: 18px; }
   .progress { min-width: 100px; }
   .btn-icon-label .btn-text { display: none; }
-  #authBtn { padding: 6px 10px; font-size: 12px; }
+  .hamburger { font-size: 18px; }
+  .header-right .btn-primary { font-size: 11px; padding: 6px 10px; }
 }
 
 @media (max-width: 360px) {
   .votebar > span { font-size: 0; }
+  .header-right a { display: none; }
 }

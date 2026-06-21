@@ -1283,6 +1283,7 @@ footer {
   margin: 16px 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+   margin-top: 40px;
 }
 
 .admin-nav .tab { flex-shrink: 0; }
